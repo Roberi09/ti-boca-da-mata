@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Protocolo {{ protocolo }} - Suporte T.I. BDM{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+        <div class="card-title" style="justify-content:center; border:none; padding-bottom:0;">
+            <span class="icon"></span> Chamado Aberto com Sucesso!
+        </div>
+        <p style="color: var(--cinza-medio); margin-bottom: 8px;">Anote seu protocolo para acompanhar o andamento:</p>
+        <div class="protocolo-number">{{ protocolo }}</div>
+
+        <div class="protocolo-info">
+            <p><strong>Nome:</strong> {{ chamado.nome }}</p>
+            <p><strong>Setor:</strong> {{ chamado.setor }}</p>
+            <p><strong>Telefone:</strong> {{ chamado.telefone or 'Não informado' }}</p>
+            <p><strong>Descrição:</strong> {{ chamado.descricao }}</p>
+            <p><strong>Status:</strong> <span class="status-badge status-aberto">Aberto</span></p>
+            <p><strong>Data de Abertura:</strong> {{ chamado.data_abertura }}</p>
+        </div>
+
+        <br>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+            <a href="{{ url_for('consultar') }}" class="btn btn-primary">Consultar Protocolo</a>
+            <a href="{{ url_for('index') }}" class="btn btn-primary" style="background: var(--cinza-medio);">Abrir Novo Chamado</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

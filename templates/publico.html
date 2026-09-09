@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Abrir Chamado - Suporte T.I. BDM{% endblock %}
+
+{% block content %}
+<div class="home-banner">
+    <h2>Sistema de Chamados de Suporte T.I.</h2>
+    <p>Prefeitura Municipal de Boca da Mata - AL</p>
+    <p>Abra seu chamado de suporte técnico e acompanhe pelo protocolo gerado.</p>
+</div>
+
+<div class="card">
+    <div class="card-title">
+        <span class="icon"></span> Abrir Chamado
+    </div>
+
+    <form method="POST" action="{{ url_for('abrir_chamado') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-grid">
+            <div class="form-group">
+                <label for="nome">Nome Completo *</label>
+                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+            </div>
+            <div class="form-group">
+                <label for="setor">Setor *</label>
+                <select id="setor" name="setor" required>
+                    <option value="">Selecione o setor</option>
+                    <option value="Gestão e Patrimônio">Gestão e Patrimônio</option>
+                    <option value="Procuradoria Geral do Município">Procuradoria Geral do Município</option>
+                    <option value="Agricultura e Meio Ambiente">Agricultura e Meio Ambiente</option>
+                    <option value="Educação">Educação</option>
+                    <option value="Esportes e Juventudes">Esportes e Juventudes</option>
+                    <option value="Finanças e Tributos">Finanças e Tributos</option>
+                    <option value="Obras Públicas">Obras Públicas</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Serviços Urbanos">Serviços Urbanos</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" placeholder="(82) 99999-0000">
+            </div>
+            <div class="form-group full-width">
+                <label for="descricao">Descrição do Problema *</label>
+                <textarea id="descricao" name="descricao" placeholder="Descreva detalhadamente o problema que está enfrentando..." required></textarea>
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary btn-block">Abrir Chamado</button>
+    </form>
+</div>
+{% endblock %}

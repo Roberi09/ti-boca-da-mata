@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Painel Administrativo - Suporte T.I. BDM{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-title">
+        <span class="icon">⚙️</span> Painel Administrativo - Chamados
+        <span style="margin-left:auto; font-size:0.8rem; font-weight:400; color: var(--cinza-medio);">
+            {{ chamados|length }} chamado(s) registrado(s)
+        </span>
+    </div>
+
+    {% if chamados|length == 0 %}
+        <p style="text-align:center; color:var(--cinza-medio); padding:40px 0;">Nenhum chamado registrado ainda.</p>
+    {% else %}
+    <div class="tabela-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Protocolo</th>
+                    <th>Data</th>
+                    <th>Nome</th>
+                    <th>Setor</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Mensagem T.I.</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in chamados %}
+                <tr>
+                    <td><strong>{{ c.protocolo }}</strong></td>
+                    <td style="white-space:nowrap;">{{ c.data_abertura }}</td>
+                    <td>{{ c.nome }}</td>
+                    <td>{{ c.setor }}</td>
+                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ c.descricao }}">{{ c.descricao[:60] }}{% if c.descricao|length > 60 %}...{% endif %}</td>
+                    <td>
+                        {% if c.status == 'Aberto' %}
+                            <span class="status-badge status-aberto">Aberto</span>
+                        {% elif c.status == 'Em atendimento' %}
+                            <span class="status-badge status-andamento">Em Atendimento</span>
+                        {% elif c.status == 'Resolvido' %}
+                            <span class="status-badge status-resolvido">Resolvido</span>
+                        {% elif c.status == 'Fechado' %}
+                            <span class="status-badge status-fechado">Fechado</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('admin_atualizar', protocolo=c.protocolo) }}" method="POST" class="table-actions">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <select name="status">
+                                <option value="Aberto" {% if c.status == 'Aberto' %}selected{% endif %}>Aberto</option>
+                                <option value="Em atendimento" {% if c.status == 'Em atendimento' %}selected{% endif %}>Em Atendimento</option>
+                                <option value="Resolvido" {% if c.status == 'Resolvido' %}selected{% endif %}>Resolvido</option>
+                                <option value="Fechado" {% if c.status == 'Fechado' %}selected{% endif %}>Fechado</option>
+                            </select>
+                            <input type="text" name="mensagem_adm" value="{{ c.mensagem_adm }}" placeholder="Mensagem para o solicitante">
+                            <button type="submit" class="btn btn-success btn-sm">Atualizar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+<div style="text-align:right;">
+    <a href="{{ url_for('admin_logout') }}" class="btn btn-primary" style="background: var(--vermelho-erro);">Sair</a>
+</div>
+{% endblock %}

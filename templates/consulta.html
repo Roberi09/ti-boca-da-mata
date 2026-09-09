@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Consultar Protocolo - Suporte T.I. BDM{% endblock %}
+
+{% block content %}
+<div class="card consulta-box">
+    <div class="card-title">
+        <span class="icon"></span> Consultar Protocolo
+    </div>
+
+    <form method="POST" action="{{ url_for('consultar') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-group">
+            <label for="protocolo">Número do Protocolo</label>
+            <input
+                type="text"
+                id="protocolo"
+                name="protocolo"
+                placeholder="Ex: CH-A1B2C3D4"
+                maxlength="11"
+                required
+            >
+        </div>
+
+        <br>
+        <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+    </form>
+</div>
+
+{% if chamado %}
+<div class="card resultado-card">
+    <div class="card-title">
+        <span class="icon"></span> Chamado {{ chamado.protocolo }}
+    </div>
+
+    <div class="chamado-detalhe">
+        <div class="form-grid">
+            <p><strong>Nome:</strong> {{ chamado.nome }}</p>
+            <p><strong>Setor:</strong> {{ chamado.setor }}</p>
+            <p><strong>Telefone:</strong> {{ chamado.telefone or 'Não informado' }}</p>
+        </div>
+        <br>
+        <p><strong>Descrição:</strong></p>
+        <p style="background:var(--branco); padding:12px; border-radius:6px; margin-top:4px;">{{ chamado.descricao }}</p>
+
+        <br>
+        <div class="form-grid">
+            <div>
+                <p><strong>Status Atual:</strong></p>
+                {% if chamado.status == 'Aberto' %}
+                    <span class="status-badge status-aberto">Aberto</span>
+                {% elif chamado.status == 'Em atendimento' %}
+                    <span class="status-badge status-andamento">Em Atendimento</span>
+                {% elif chamado.status == 'Concluído' %}
+                    <span class="status-badge status-resolvido">Concluído</span>
+                {% elif chamado.status == 'Cancelado' %}
+                    <span class="status-badge status-fechado">Cancelado</span>
+                {% endif %}
+            </div>
+            <div>
+                <p><strong>Data de Abertura:</strong> {{ chamado.data_abertura }}</p>
+                {% if chamado.data_atendimento %}
+                    <p><strong>Em Atendimento Desde:</strong> {{ chamado.data_atendimento }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if chamado.mensagem_adm %}
+        <br>
+        <div style="background: var(--azul-suave); padding: 14px; border-radius: 8px; border-left: 4px solid var(--azul-claro);">
+            <p style="font-weight:600; color: var(--azul-medio); margin-bottom:6px;">Mensagem da Equipe T.I.:</p>
+            <p>{{ chamado.mensagem_adm }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

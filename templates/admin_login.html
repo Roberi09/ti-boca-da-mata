@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Área Administrativa - Suporte T.I. BDM{% endblock %}
+
+{% block content %}
+<div class="card login-box">
+    <div class="card-title" style="justify-content:center;">
+        <span class="icon">🔒</span> Acesso Administrativo
+    </div>
+
+    <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+            <label for="usuario">Usuário</label>
+            <input type="text" id="usuario" name="usuario" placeholder="Digite seu usuário" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+</div>
+{% endblock %}

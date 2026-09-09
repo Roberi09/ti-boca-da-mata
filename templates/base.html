@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Suporte T.I. - Prefeitura de Boca da Mata{% endblock %}</title>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-top">
+            <span>Prefeitura Municipal de Boca da Mata - Alagoas</span>
+            <span>Suporte T.I. &copy; 2026</span>
+        </div>
+        <div class="header-main">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Prefeitura" class="logo-img">
+            <div class="header-text">
+                <h1>Suporte T.I.</h1>
+                <p>Sistema de Chamados</p>
+            </div>
+            <nav class="header-nav">
+                <a href="{{ url_for('index') }}" {% if request.endpoint=='index' %}class="active" {% endif %}>Início</a>
+                <a href="{{ url_for('consultar') }}" {% if request.endpoint=='consultar' %}class="active" {% endif
+                    %}>Consultar Protocolo</a>
+                <a href="{{ url_for('admin_login') }}" {% if request.endpoint=='admin_login' %}class="active" {% endif
+                    %}>Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Desenvolvido por <strong>Robério Tech</strong> &copy; 2026 - Prefeitura Municipal de Boca da
+            Mata - AL</p>
+    </footer>
+</body>
+
+</html>
