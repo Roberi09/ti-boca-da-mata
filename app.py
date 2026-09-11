@@ -2,6 +2,7 @@ import os
 import re
 import uuid
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from flask import (
     Flask, render_template, request, redirect,
@@ -74,6 +75,20 @@ SessionLocal = scoped_session(
 )
 
 
+# ============================================================
+# HORÁRIO DO BRASIL
+# ============================================================
+
+FUSO_BRASIL = ZoneInfo("America/Sao_Paulo")
+
+
+def agora_brasil():
+    """Retorna a data/hora atual no horário de Brasília."""
+    # Remove o timezone para manter compatibilidade com as colunas
+    # DateTime atuais do PostgreSQL.
+    return datetime.now(FUSO_BRASIL).replace(tzinfo=None)
+
+
 class Usuario(Base):
     __tablename__ = "usuarios"
 
@@ -82,7 +97,7 @@ class Usuario(Base):
     nome = Column(String(150), nullable=False)
     senha_hash = Column(String(255), nullable=False)
     ativo = Column(Boolean, nullable=False, default=True)
-    criado_em = Column(DateTime, nullable=False, default=datetime.now)
+    criado_em = Column(DateTime, nullable=False, default=agora_brasil)
 
 
 class Chamado(Base):
@@ -96,7 +111,7 @@ class Chamado(Base):
     descricao = Column(Text, nullable=False)
     status = Column(String(30), nullable=False, default="Aberto")
     mensagem_adm = Column(Text, nullable=False, default="")
-    data_abertura = Column(DateTime, nullable=False, default=datetime.now)
+    data_abertura = Column(DateTime, nullable=False, default=agora_brasil)
     data_atendimento = Column(DateTime, nullable=True)
 
 
@@ -120,7 +135,7 @@ class HistoricoChamado(Base):
     status_anterior = Column(String(30), nullable=True)
     status_novo = Column(String(30), nullable=True)
     mensagem = Column(Text, nullable=True)
-    criado_em = Column(DateTime, nullable=False, default=datetime.now)
+    criado_em = Column(DateTime, nullable=False, default=agora_brasil)
 
 
 Base.metadata.create_all(bind=engine)
@@ -289,7 +304,7 @@ def abrir_chamado():
             descricao=descricao,
             status="Aberto",
             mensagem_adm="",
-            data_abertura=datetime.now(),
+            data_abertura=agora_brasil(),
         )
 
         db.add(chamado)
@@ -302,7 +317,7 @@ def abrir_chamado():
             status_anterior=None,
             status_novo="Aberto",
             mensagem="Chamado aberto pelo solicitante.",
-            criado_em=datetime.now(),
+            criado_em=agora_brasil(),
         )
 
         db.add(historico)
@@ -479,7 +494,7 @@ def admin_atualizar(protocolo):
         chamado.mensagem_adm = mensagem
 
         if status == "Em atendimento" and not chamado.data_atendimento:
-            chamado.data_atendimento = datetime.now()
+            chamado.data_atendimento = agora_brasil()
 
         historico = HistoricoChamado(
             chamado_id=chamado.id,
@@ -488,7 +503,7 @@ def admin_atualizar(protocolo):
             status_anterior=status_anterior,
             status_novo=status,
             mensagem=mensagem,
-            criado_em=datetime.now(),
+            criado_em=agora_brasil(),
         )
 
         db.add(historico)
