@@ -441,8 +441,8 @@ def admin_atualizar(protocolo):
     status_validos = {
         "Aberto",
         "Em atendimento",
-        "Concluído",
-        "Cancelado",
+        "Resolvido",
+        "Fechado",
     }
 
     if status not in status_validos:
