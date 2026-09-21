@@ -3,6 +3,7 @@ import re
 import uuid
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from urllib.parse import quote
 
 from flask import (
     Flask, render_template, request, redirect,
@@ -33,6 +34,9 @@ app.secret_key = os.environ.get("SECRET_KEY", "")
 ADMIN_USER = os.environ.get("ADMIN_USER", "").strip().lower()
 ADMIN_PASS_HASH = os.environ.get("ADMIN_PASS_HASH", "")
 DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+
+# Número que receberá os chamados pelo WhatsApp (formato internacional)
+WHATSAPP_TI = os.environ.get("WHATSAPP_TI", "").strip()
 
 if not app.secret_key:
     raise RuntimeError("Defina SECRET_KEY como variável de ambiente.")
@@ -149,6 +153,27 @@ def remove_db_session(exception=None):
 # ============================================================
 # FUNÇÕES AUXILIARES
 # ============================================================
+
+def gerar_link_whatsapp(chamado):
+    """Gera o link do WhatsApp com o chamado preenchido na mensagem."""
+    if not WHATSAPP_TI:
+        return ""
+
+    mensagem_whatsapp = (
+        "*NOVO CHAMADO DE TI*\n\n"
+        f"Protocolo: {chamado.protocolo}\n\n"
+        f"Solicitante: {chamado.nome}\n"
+        f"Setor: {chamado.setor}\n"
+        f"Telefone: {chamado.telefone or 'Não informado'}\n\n"
+        "Problema:\n"
+        f"{chamado.descricao}\n\n"
+        f"Status: {chamado.status}"
+    )
+
+    return (
+        f"https://wa.me/{WHATSAPP_TI}"
+        f"?text={quote(mensagem_whatsapp, safe='')}"
+    )
 
 def gerar_protocolo():
     return f"CH-{uuid.uuid4().hex[:8].upper()}"
@@ -324,10 +349,13 @@ def abrir_chamado():
         db.commit()
         db.refresh(chamado)
 
+        whatsapp_link = gerar_link_whatsapp(chamado)
+
         return render_template(
             "protocolo.html",
             protocolo=chamado.protocolo,
             chamado=chamado_para_dict(chamado),
+            whatsapp_link=whatsapp_link
         )
 
     except Exception:

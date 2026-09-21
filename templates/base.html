@@ -11,10 +11,6 @@
 
 <body>
     <header class="header">
-        <div class="header-top">
-            <span>Prefeitura Municipal de Boca da Mata - Alagoas</span>
-            <span>Suporte T.I. &copy; 2026</span>
-        </div>
         <div class="header-main">
             <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Prefeitura" class="logo-img">
             <div class="header-text">
@@ -23,11 +19,21 @@
             </div>
             <nav class="header-nav">
                 <a href="{{ url_for('index') }}" {% if request.endpoint=='index' %}class="active" {% endif %}>Início</a>
-                <a href="{{ url_for('consultar') }}" {% if request.endpoint=='consultar' %}class="active" {% endif
-                    %}>Consultar Protocolo</a>
-                <a href="{{ url_for('admin_login') }}" {% if request.endpoint=='admin_login' %}class="active" {% endif
-                    %}>Admin</a>
+                <a href="{{ url_for('consultar') }}" {% if request.endpoint=='consultar' %}class="active" {% endif %}>Consultar Protocolo</a>
+                <a href="{{ url_for('admin_login') }}" {% if request.endpoint=='admin_login' %}class="active" {% endif %}>Admin</a>
             </nav>
+
+            <div class="menu-mobile">
+                <button type="button" class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir menu">
+                    ☰
+                </button>
+
+                <div class="menu-dropdown" id="menuDropdown">
+                    <a href="{{ url_for('index') }}">Início</a>
+                    <a href="{{ url_for('consultar') }}">Consultar Protocolo</a>
+                    <a href="{{ url_for('admin_login') }}">Admin</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -46,11 +52,32 @@
     <footer class="footer">
         <p>Desenvolvido por 
     <a href="https://www.instagram.com/roberio.tech/" target="_blank" rel="noopener noreferrer">
-        <strong>Robério Tech</strong>
+        <strong>Robério Tech - TI & Suporte</strong>
     </a>
     &copy; 2026 - Prefeitura Municipal de Boca da Mata - AL
 </p>
     </footer>
+    <script>
+    function toggleMenu() {
+        const menu = document.getElementById("menuDropdown");
+        menu.classList.toggle("ativo");
+    }
+
+    document.addEventListener("click", function(event) {
+        const menu = document.getElementById("menuDropdown");
+        const button = document.querySelector(".menu-toggle");
+
+        if (
+            menu &&
+            button &&
+            !menu.contains(event.target) &&
+            !button.contains(event.target)
+        ) {
+            menu.classList.remove("ativo");
+        }
+    });
+    </script>
+
 </body>
 
 </html>

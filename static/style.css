@@ -85,22 +85,23 @@ body {
     font-weight: 300;
 }
 
+/* ==================== HEADER NAV ==================== */
+
 .header-nav {
     display: flex;
-    gap: 6px;
+    align-items: center;
+    gap: 4px;
     margin-left: auto;
-    flex-wrap: wrap;
 }
 
 .header-nav a {
     color: var(--branco);
     text-decoration: none;
-    padding: 8px 18px;
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    font-weight: 500;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 0.9rem;
     transition: var(--transicao);
-    border: 1px solid rgba(255,255,255,0.15);
 }
 
 .header-nav a:hover {
@@ -464,11 +465,10 @@ table tr:hover td {
 
 /* ==================== HOMEPAGE BANNER ==================== */
 .home-banner {
-    background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-medio) 50%, var(--azul-claro) 100%);
-    color: var(--branco);
-    border-radius: var(--radius);
-    padding: 40px;
     text-align: center;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 20px;
     margin-bottom: 28px;
     box-shadow: var(--sombra-forte);
 }
@@ -476,14 +476,17 @@ table tr:hover td {
 .home-banner h2 {
     font-size: 1.6rem;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin: 0 0 12px 0;
+    color: #006cda;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.20);
 }
 
-.home-banner p {
-    opacity: 0.85;
-    font-size: 0.95rem;
-    max-width: 600px;
-    margin: 0 auto 24px;
+.banner-logo {
+    display: block;
+    width: 390px;
+    max-width: 80%;
+    height: auto;
+    margin: 0 auto;
 }
 
 .home-banner .btn {
@@ -507,9 +510,63 @@ table tr:hover td {
     background: rgba(255,255,255,0.25);
 }
 
+/* ==================== MENU MOBILE ==================== */
+
+.menu-mobile {
+    display: none;
+}
+
+.menu-toggle {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    font-size: 26px;
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transicao);
+}
+
+.menu-toggle:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 56px;
+    background: var(--branco);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    overflow: hidden;
+    min-width: 210px;
+    z-index: 1000;
+}
+
+.menu-dropdown.ativo {
+    display: block;
+}
+
+.menu-dropdown a {
+    display: block;
+    padding: 14px 18px;
+    color: var(--azul-medio);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transicao);
+}
+
+.menu-dropdown a:hover {
+    background: var(--azul-suave);
+}
+
 /* ==================== RESPONSIVO ==================== */
 @media (max-width: 768px) {
-    .header-top, .header-main {
+    .header-top,
+    .header-main {
         padding: 10px 16px;
     }
 
@@ -530,13 +587,27 @@ table tr:hover td {
         font-size: 1.15rem;
     }
 
+    /* Esconde os links normais no celular */
     .header-nav {
-        gap: 4px;
+        display: none;
     }
 
-    .header-nav a {
-        padding: 6px 12px;
-        font-size: 0.78rem;
+    /* Mostra o menu hambúrguer */
+    .menu-mobile {
+        display: block;
+        position: relative;
+        margin-left: auto;
+    }
+
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu-dropdown {
+        top: 56px;
+        right: 0;
     }
 
     .protocolo-number {
@@ -551,7 +622,8 @@ table tr:hover td {
         font-size: 1.2rem;
     }
 
-    table td, table th {
+    table td,
+    table th {
         padding: 8px 10px;
         font-size: 0.8rem;
     }
