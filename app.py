@@ -160,7 +160,7 @@ def gerar_link_whatsapp(chamado):
         return ""
 
     mensagem_whatsapp = (
-        "*NOVO CHAMADO DE TI*\n\n"
+        "[ NOVO CHAMADO DE TI ]\n\n"
         f"Protocolo: {chamado.protocolo}\n\n"
         f"Solicitante: {chamado.nome}\n"
         f"Setor: {chamado.setor}\n"
